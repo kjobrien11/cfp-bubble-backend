@@ -15,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BubbleService {
@@ -58,13 +56,14 @@ public class BubbleService {
 
         BubbleEntity saved = bubbleRepository.save(bubble);
 
-        //add teams to bubble
-
+        Set<Integer> teamIds = new HashSet<>();
         for (Integer teamId : bubbleRequest.teams()){
-            TeamEntity team = teamRepository.findById(teamId)
-                    .orElseThrow(() -> new RuntimeException("Team not found"));
+            if(teamIds.add(teamId)){
+                TeamEntity team = teamRepository.findById(teamId)
+                        .orElseThrow(() -> new RuntimeException("Team not found"));
+                bubbleTeamRepository.save(new BubbleTeamEntity(saved, team));
+            }
 
-            bubbleTeamRepository.save(new BubbleTeamEntity(saved, team));
         }
 
         return bubble.getPublicId();
