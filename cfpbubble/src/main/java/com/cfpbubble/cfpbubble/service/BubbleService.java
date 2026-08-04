@@ -35,6 +35,9 @@ public class BubbleService {
     @Autowired
     TeamRepository teamRepository;
 
+    @Autowired
+    TeamCacheService teamCacheService;
+
 
     public String createBubble(BubbleRequest bubbleRequest) {
 
@@ -58,7 +61,7 @@ public class BubbleService {
 
         Set<Integer> teamIds = new HashSet<>();
         for (Integer teamId : bubbleRequest.teams()){
-            if(teamIds.add(teamId)){
+            if(teamCacheService.exists(teamId) && teamIds.add(teamId)){
                 TeamEntity team = teamRepository.findById(teamId)
                         .orElseThrow(() -> new RuntimeException("Team not found"));
                 bubbleTeamRepository.save(new BubbleTeamEntity(saved, team));
