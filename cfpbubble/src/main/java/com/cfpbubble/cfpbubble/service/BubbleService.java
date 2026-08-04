@@ -7,6 +7,7 @@ import com.cfpbubble.cfpbubble.entity.BubbleEntity;
 import com.cfpbubble.cfpbubble.entity.BubbleTeamEntity;
 import com.cfpbubble.cfpbubble.entity.SeasonEntity;
 import com.cfpbubble.cfpbubble.entity.TeamEntity;
+import com.cfpbubble.cfpbubble.exception.MaxBubblesException;
 import com.cfpbubble.cfpbubble.repository.BubbleRepository;
 import com.cfpbubble.cfpbubble.repository.BubbleTeamRepository;
 import com.cfpbubble.cfpbubble.repository.SeasonRepository;
@@ -53,7 +54,7 @@ public class BubbleService {
 
         int bubbleNumber = bubbleRepository.countByEmailAndSeason_SeasonId(bubbleRequest.email(), season.getSeasonId()) + 1;
         if(bubbleNumber > 5){
-            return null;
+            throw new MaxBubblesException();
         }
         bubble.setBubbleNumber(bubbleNumber);
 
