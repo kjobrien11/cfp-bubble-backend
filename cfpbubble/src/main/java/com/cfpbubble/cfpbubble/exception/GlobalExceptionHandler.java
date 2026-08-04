@@ -10,13 +10,21 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MaxBubblesException.class)
-    public ResponseEntity<ErrorResponse> handleMaxBubbles(
-            MaxBubblesException e
-    ) {
+    public ResponseEntity<ErrorResponse> handleMaxBubbles(MaxBubblesException e){
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(
                         "MAX_BUBBLES_REACHED",
+                        e.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(BubbleNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleBubbleNotFound(BubbleNotFoundException e){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(
+                        "BUBBLE_NOT_FOUND",
                         e.getMessage()
                 ));
     }

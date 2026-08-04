@@ -7,6 +7,7 @@ import com.cfpbubble.cfpbubble.entity.BubbleEntity;
 import com.cfpbubble.cfpbubble.entity.BubbleTeamEntity;
 import com.cfpbubble.cfpbubble.entity.SeasonEntity;
 import com.cfpbubble.cfpbubble.entity.TeamEntity;
+import com.cfpbubble.cfpbubble.exception.BubbleNotFoundException;
 import com.cfpbubble.cfpbubble.exception.MaxBubblesException;
 import com.cfpbubble.cfpbubble.repository.BubbleRepository;
 import com.cfpbubble.cfpbubble.repository.BubbleTeamRepository;
@@ -76,19 +77,19 @@ public class BubbleService {
     public BubbleResponse getBubbleByPublicId(String publicId) {
 
         BubbleEntity bubble =  bubbleRepository.findByPublicId(publicId)
-                .orElseThrow(() -> new RuntimeException("Bubble not found"));
+                .orElseThrow(() -> new BubbleNotFoundException("Bubble with ID: " + publicId + " not found"));
 
         return generateBubbleResponse(bubble);
     }
 
     public List<BubbleResponse> getBubblesByEmail(String email) {
         List<BubbleEntity> bubbles =  bubbleRepository.findByEmail(email);
+        System.out.println(bubbles);
         List<BubbleResponse> responses = new ArrayList<>();
         for (BubbleEntity bubble : bubbles) {
             responses.add(generateBubbleResponse(bubble));
         }
         return responses;
-        //more code
     }
 
     private BubbleResponse generateBubbleResponse(BubbleEntity bubble){
