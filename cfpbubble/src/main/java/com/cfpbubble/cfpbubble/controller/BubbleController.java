@@ -21,6 +21,11 @@ public class BubbleController {
         return  bubbleService.getBubbleByPublicId(publicId);
     }
 
+    @GetMapping
+    public List<BubbleResponse> getBubblesByEmail(@RequestParam String email) {
+        return bubbleService.getBubblesByEmail(email);
+    }
+
     @PostMapping("/create")
     public String createBubble(@RequestBody BubbleRequest bubbleRequest) {
         return bubbleService.createBubble(bubbleRequest);

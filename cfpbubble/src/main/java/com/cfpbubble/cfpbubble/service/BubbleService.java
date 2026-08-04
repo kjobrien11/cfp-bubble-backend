@@ -70,6 +70,20 @@ public class BubbleService {
         BubbleEntity bubble =  bubbleRepository.findByPublicId(publicId)
                 .orElseThrow(() -> new RuntimeException("Bubble not found"));
 
+        return generateBubbleResponse(bubble);
+    }
+
+    public List<BubbleResponse> getBubblesByEmail(String email) {
+        List<BubbleEntity> bubbles =  bubbleRepository.findByEmail(email);
+        List<BubbleResponse> responses = new ArrayList<>();
+        for (BubbleEntity bubble : bubbles) {
+            responses.add(generateBubbleResponse(bubble));
+        }
+        return responses;
+        //more code
+    }
+
+    private BubbleResponse generateBubbleResponse(BubbleEntity bubble){
         List<TeamResponse> teams = new ArrayList<>();
 
         for(BubbleTeamEntity team : bubble.getTeams()){
@@ -83,7 +97,6 @@ public class BubbleService {
                             + ".png"
             ));
         }
-
         return new BubbleResponse(
                 bubble.getPublicId(),
                 bubble.getName(),
