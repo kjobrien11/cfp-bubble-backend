@@ -25,4 +25,14 @@ public class BubbleTeamEntity {
     @MapsId("espnId")
     @JoinColumn(name = "ESPN_ID")
     private TeamEntity team;
+
+    public BubbleTeamEntity(BubbleEntity bubble, TeamEntity team) {
+        this.bubble = bubble;
+        this.team = team;
+
+        this.id = new BubbleTeamId(
+                bubble.getBubbleId(),
+                team.getEspnId()
+        );
+    }
 }
