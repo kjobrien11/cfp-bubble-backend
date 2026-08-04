@@ -9,6 +9,7 @@ import com.cfpbubble.cfpbubble.entity.SeasonEntity;
 import com.cfpbubble.cfpbubble.entity.TeamEntity;
 import com.cfpbubble.cfpbubble.exception.BubbleNotFoundException;
 import com.cfpbubble.cfpbubble.exception.MaxBubblesException;
+import com.cfpbubble.cfpbubble.exception.SeasonStartedException;
 import com.cfpbubble.cfpbubble.repository.BubbleRepository;
 import com.cfpbubble.cfpbubble.repository.BubbleTeamRepository;
 import com.cfpbubble.cfpbubble.repository.SeasonRepository;
@@ -43,8 +44,14 @@ public class BubbleService {
 
     public String createBubble(BubbleRequest bubbleRequest) {
 
+
+
         SeasonEntity season = seasonRepository.findByYear(2026)
                 .orElseThrow(() -> new RuntimeException("Season not found"));
+
+        if (LocalDateTime.now().isAfter(season.getSubmissionClose())) {
+            throw new SeasonStartedException();
+        }
 
         BubbleEntity bubble = new BubbleEntity();
         bubble.setName(bubbleRequest.name());

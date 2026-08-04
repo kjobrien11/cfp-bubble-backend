@@ -28,4 +28,14 @@ public class GlobalExceptionHandler {
                         e.getMessage()
                 ));
     }
+
+    @ExceptionHandler(SeasonStartedException.class)
+    public ResponseEntity<ErrorResponse> handleBubbleNotFound(SeasonStartedException e){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(
+                        "SEASON_STARTED",
+                        e.getMessage()
+                ));
+    }
 }
