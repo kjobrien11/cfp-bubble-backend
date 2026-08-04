@@ -8,8 +8,7 @@ import java.util.UUID;
 public class PublicIdService {
 
     public String generateBubbleId(int year) {
-        return "CFP-" + year + "-" +
-                UUID.randomUUID()
+        return year + UUID.randomUUID()
                         .toString()
                         .substring(0, 8)
                         .toUpperCase();

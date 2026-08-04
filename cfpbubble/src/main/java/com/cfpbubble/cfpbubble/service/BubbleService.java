@@ -47,9 +47,14 @@ public class BubbleService {
         bubble.setName(bubbleRequest.name());
         bubble.setEmail(bubbleRequest.email());
         bubble.setSeason(season);
-        bubble.setBubbleNumber(1); //hard code for now logic later
         bubble.setSubmissionTime(LocalDateTime.now());
         bubble.setPublicId(publicIdService.generateBubbleId(season.getYear()));
+
+        int bubbleNumber = bubbleRepository.countByEmailAndSeason_SeasonId(bubbleRequest.email(), season.getSeasonId()) + 1;
+        if(bubbleNumber > 5){
+            return null;
+        }
+        bubble.setBubbleNumber(bubbleNumber);
 
         BubbleEntity saved = bubbleRepository.save(bubble);
 
