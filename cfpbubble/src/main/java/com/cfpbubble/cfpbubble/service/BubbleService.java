@@ -41,11 +41,7 @@ public class BubbleService {
     @Autowired
     TeamCacheService teamCacheService;
 
-
     public String createBubble(BubbleRequest bubbleRequest) {
-
-
-
         SeasonEntity season = seasonRepository.findByYear(2026)
                 .orElseThrow(() -> new RuntimeException("Season not found"));
 
