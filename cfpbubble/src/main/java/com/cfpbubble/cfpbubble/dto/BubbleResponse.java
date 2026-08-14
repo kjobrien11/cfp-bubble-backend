@@ -9,6 +9,8 @@ public record BubbleResponse(
         String name,
         Integer season,
         LocalDateTime submissionTime,
-        List<TeamResponse> teams
+        List<TeamResponse> teams,
+        Integer wins,
+        Integer losses
 ) {
 }

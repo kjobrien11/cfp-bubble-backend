@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class BubbleService {
@@ -57,7 +58,7 @@ public class BubbleService {
         bubble.setPublicId(publicIdService.generateBubbleId(season.getYear()));
 
         int bubbleNumber = bubbleRepository.countByEmailAndSeason_SeasonId(bubbleRequest.email(), season.getSeasonId()) + 1;
-        if(bubbleNumber > 5){
+        if(bubbleNumber > 3){
             throw new MaxBubblesException();
         }
         bubble.setBubbleNumber(bubbleNumber);
@@ -85,9 +86,21 @@ public class BubbleService {
         return generateBubbleResponse(bubble);
     }
 
+    public List<BubbleResponse> getAllBubbles() {
+        List<BubbleEntity> bubbles = bubbleRepository.findAll();
+        return getBubbleResponses(bubbles);
+    }
+
     public List<BubbleResponse> getBubblesByEmail(String email) {
         List<BubbleEntity> bubbles =  bubbleRepository.findByEmail(email);
-        System.out.println(bubbles);
+        return getBubbleResponses(bubbles);
+    }
+
+    public long getUniqueUsers() {
+        return bubbleRepository.countUniqueUsers();
+    }
+
+    private List<BubbleResponse> getBubbleResponses(List<BubbleEntity> bubbles){
         List<BubbleResponse> responses = new ArrayList<>();
         for (BubbleEntity bubble : bubbles) {
             responses.add(generateBubbleResponse(bubble));
@@ -109,11 +122,15 @@ public class BubbleService {
                             + ".png"
             ));
         }
+        int wins = ThreadLocalRandom.current().nextInt(0, 13) * teams.size();
         return new BubbleResponse(
                 bubble.getPublicId(),
                 bubble.getName(),
                 bubble.getSeason().getYear(),
                 bubble.getSubmissionTime(),
-                teams);
+                teams,
+                wins, 12*teams.size()-wins);
     }
+
+
 }
