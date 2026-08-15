@@ -1,5 +1,6 @@
 package com.cfpbubble.cfpbubble.controller;
 
+import com.cfpbubble.cfpbubble.dto.BubbleCreationReponse;
 import com.cfpbubble.cfpbubble.dto.BubbleRequest;
 import com.cfpbubble.cfpbubble.dto.BubbleResponse;
 import com.cfpbubble.cfpbubble.service.BubbleService;
@@ -31,7 +32,7 @@ public class BubbleController {
     }
 
     @PostMapping("/create")
-    public String createBubble(@Valid @RequestBody BubbleRequest bubbleRequest) {
+    public BubbleCreationReponse createBubble(@Valid @RequestBody BubbleRequest bubbleRequest) {
         return bubbleService.createBubble(bubbleRequest);
     }
 

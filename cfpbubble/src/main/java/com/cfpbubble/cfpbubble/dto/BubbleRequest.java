@@ -16,7 +16,7 @@ public record BubbleRequest(
         @Email
         String email,
 
-        @NotEmpty @Size(max = 20)
+        @NotEmpty @Size(min=1, max = 20)
         List<Integer> teams
 
 ) {}

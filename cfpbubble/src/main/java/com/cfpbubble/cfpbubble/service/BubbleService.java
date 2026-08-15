@@ -1,5 +1,6 @@
 package com.cfpbubble.cfpbubble.service;
 
+import com.cfpbubble.cfpbubble.dto.BubbleCreationReponse;
 import com.cfpbubble.cfpbubble.dto.BubbleRequest;
 import com.cfpbubble.cfpbubble.dto.BubbleResponse;
 import com.cfpbubble.cfpbubble.dto.TeamResponse;
@@ -42,7 +43,7 @@ public class BubbleService {
     @Autowired
     TeamCacheService teamCacheService;
 
-    public String createBubble(BubbleRequest bubbleRequest) {
+    public BubbleCreationReponse createBubble(BubbleRequest bubbleRequest) {
         SeasonEntity season = seasonRepository.findByYear(2026)
                 .orElseThrow(() -> new RuntimeException("Season not found"));
 
@@ -75,7 +76,7 @@ public class BubbleService {
 
         }
 
-        return bubble.getPublicId();
+        return new BubbleCreationReponse(bubble.getPublicId());
     }
 
     public BubbleResponse getBubbleByPublicId(String publicId) {
