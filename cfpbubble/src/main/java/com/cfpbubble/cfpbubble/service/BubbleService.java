@@ -123,14 +123,15 @@ public class BubbleService {
                             + ".png"
             ));
         }
-        int wins = ThreadLocalRandom.current().nextInt(0, 13) * teams.size();
+//        int wins = ThreadLocalRandom.current().nextInt(0, 13) * teams.size();
         return new BubbleResponse(
                 bubble.getPublicId(),
                 bubble.getName(),
                 bubble.getSeason().getYear(),
                 bubble.getSubmissionTime(),
-                teams,
-                wins, 12*teams.size()-wins);
+                teams,0, 0);
+//                teams,
+//                wins, 12*teams.size()-wins);
     }
 
 
