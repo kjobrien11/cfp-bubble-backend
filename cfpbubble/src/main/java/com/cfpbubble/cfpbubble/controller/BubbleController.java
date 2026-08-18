@@ -3,7 +3,10 @@ package com.cfpbubble.cfpbubble.controller;
 import com.cfpbubble.cfpbubble.dto.BubbleCreationReponse;
 import com.cfpbubble.cfpbubble.dto.BubbleRequest;
 import com.cfpbubble.cfpbubble.dto.BubbleResponse;
+import com.cfpbubble.cfpbubble.exception.RateLimitExceededException;
 import com.cfpbubble.cfpbubble.service.BubbleService;
+import com.cfpbubble.cfpbubble.service.RateLimitService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +17,17 @@ import java.util.List;
 @RequestMapping("/bubbles")
 public class BubbleController {
 
-    @Autowired
-    private BubbleService bubbleService;
+
+    private final BubbleService bubbleService;
+    private final RateLimitService rateLimitService;
+
+    public BubbleController(
+            BubbleService bubbleService,
+            RateLimitService rateLimitService) {
+
+        this.bubbleService = bubbleService;
+        this.rateLimitService = rateLimitService;
+    }
 
     @GetMapping("/{publicId}")
     public BubbleResponse getBubbleByPublicId(@PathVariable String publicId) {
@@ -32,7 +44,15 @@ public class BubbleController {
     }
 
     @PostMapping("/create")
-    public BubbleCreationReponse createBubble(@Valid @RequestBody BubbleRequest bubbleRequest) {
+    public BubbleCreationReponse createBubble(@Valid @RequestBody BubbleRequest bubbleRequest, HttpServletRequest httpRequest) {
+        String ipAddress = httpRequest.getRemoteAddr();
+
+        if (!rateLimitService.allowSubmission(ipAddress)) {
+            throw new RateLimitExceededException(
+                    "Too many bubble submissions. Please try again later."
+            );
+        }
+
         return bubbleService.createBubble(bubbleRequest);
     }
 
