@@ -33,6 +33,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:4200",
                 "http://localhost:4222",
+                "http://192.168.1.168:4222",
                 "https://cfpbubble.com"
         ));
 
